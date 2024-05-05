@@ -1,6 +1,6 @@
 module Main (main) where
 
-import Lib
+import Graphics.Life.Frontend (runGame)
 
 main :: IO ()
-main = someFunc
+main = runGame
