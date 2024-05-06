@@ -1,2 +1,2 @@
-# hlife - Conways game of life written in Haskell
+# hlife - Conway's Game of Life written in Haskell
 
