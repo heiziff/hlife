@@ -7,11 +7,11 @@ cabal-version: 2.2
 name:           hlife
 version:        0.1.0.0
 description:    Please see the README on GitHub at <https://github.com/githubuser/hlife#readme>
-homepage:       https://github.com/githubuser/hlife#readme
-bug-reports:    https://github.com/githubuser/hlife/issues
-author:         Author name here
-maintainer:     example@example.com
-copyright:      2024 Author name here
+homepage:       https://github.com/heiziff/hlife#readme
+bug-reports:    https://github.com/heiziff/hlife/issues
+author:         Felix Zimmer
+maintainer:     felix.zimmer@student.kit.edu
+copyright:      2024 Felix Zimmer
 license:        BSD-3-Clause
 license-file:   LICENSE
 build-type:     Simple
@@ -21,7 +21,7 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/githubuser/hlife
+  location: https://github.com/heiziff/hlife
 
 library
   exposed-modules:
