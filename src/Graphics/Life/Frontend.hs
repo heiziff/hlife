@@ -10,8 +10,6 @@ import Data.ByteString.Lazy (toStrict)
 import qualified Data.Vector as V
 import Graphics.Life
 import SDL
-import System.Random
-import System.Random.Stateful (applyIOGen, newIOGenM)
 
 runGame :: IO ()
 runGame = do
@@ -21,15 +19,10 @@ runGame = do
             "hlife"
             (WindowConfig True False False Windowed NoGraphicsContext Wherever True (V2 (fromIntegral gameWidth + 20) (fromIntegral gameHeight + 20)) True)
     renderer <- createRenderer window (-1) (RendererConfig AcceleratedVSyncRenderer True)
-    game <- V.generateM (gameHeight * gameWidth) (const genVal)
+    game <- initGame
     texture <- createTexture renderer RGB332 TextureAccessStreaming (V2 (fromIntegral gameWidth) (fromIntegral gameHeight))
     appLoop texture game renderer
     destroyWindow window
-  where
-    genVal = do
-        rand <- initStdGen
-        rr <- newIOGenM rand
-        applyIOGen uniform rr
 
 appLoop :: Texture -> GameState -> Renderer -> IO ()
 appLoop texture game renderer = do
@@ -48,5 +41,5 @@ appLoop texture game renderer = do
     threadDelay 100000 -- slow down game speed
     unless qPressed $ appLoop texture (tick game) renderer
 
-encodeGameState :: V.Vector CellState -> B.Builder
+encodeGameState :: GameState -> B.Builder
 encodeGameState = V.foldr (\a acc -> encodeCellState a <> acc) (B.byteString "")

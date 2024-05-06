@@ -1,11 +1,11 @@
-module Graphics.Life (CellState (Dead, Alive), encodeCellState, GameState, tick, gameHeight, gameWidth) where
+module Graphics.Life (initGame, encodeCellState, GameState, tick, gameHeight, gameWidth) where
 
 import Data.ByteString.Builder (word8)
 import qualified Data.ByteString.Builder as B
 import Data.Maybe (mapMaybe)
 import qualified Data.Vector as V
 import System.Random
-import System.Random.Stateful (Uniform (uniformM))
+import System.Random.Stateful (Uniform (uniformM), applyIOGen, newIOGenM)
 
 type GameState = V.Vector CellState
 
@@ -18,16 +18,24 @@ instance Uniform CellState where
         if b then pure Alive else pure Dead
 
 encodeCellState :: CellState -> B.Builder
-encodeCellState Dead = word8 0
-encodeCellState Alive = word8 0xFF
+encodeCellState Dead = word8 0xFF
+encodeCellState Alive = word8 0x0
 
 type Position = (Int, Int)
 
 gameHeight :: Int
-gameHeight = 200
+gameHeight = 100
 
 gameWidth :: Int
-gameWidth = 200
+gameWidth = 100
+
+initGame :: IO GameState
+initGame = V.generateM (gameHeight * gameWidth) (const genVal)
+  where
+    genVal = do
+        rand <- initStdGen
+        rr <- newIOGenM rand
+        applyIOGen uniform rr
 
 tick :: GameState -> GameState
 tick game = V.imap (updateCell game) game
