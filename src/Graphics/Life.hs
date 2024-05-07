@@ -7,6 +7,7 @@ import qualified Data.Vector as V
 import System.Random
 import System.Random.Stateful (Uniform (uniformM), applyIOGen, newIOGenM)
 
+-- | Type to represent the state of a game
 type GameState = V.Vector CellState
 
 data CellState = Dead | Alive
@@ -17,18 +18,24 @@ instance Uniform CellState where
         b <- uniformM s
         if b then pure Alive else pure Dead
 
+-- | Encodes a cell in a Bytestring Builder for displaying it on the screen
 encodeCellState :: CellState -> B.Builder
 encodeCellState Dead = word8 0xFF
 encodeCellState Alive = word8 0x0
 
 type Position = (Int, Int)
 
+-- | The height of the game grid
 gameHeight :: Int
 gameHeight = 100
 
+-- | The width of the game grid
 gameWidth :: Int
 gameWidth = 100
 
+{- |
+  Initiates a game of life by giving each cell a random value
+-}
 initGame :: IO GameState
 initGame = V.generateM (gameHeight * gameWidth) (const genVal)
   where
@@ -37,6 +44,9 @@ initGame = V.generateM (gameHeight * gameWidth) (const genVal)
         rr <- newIOGenM rand
         applyIOGen uniform rr
 
+{- |
+  Simulates one step in the supplied game
+-}
 tick :: GameState -> GameState
 tick game = V.imap (updateCell game) game
 

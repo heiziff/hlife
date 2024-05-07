@@ -11,6 +11,7 @@ import qualified Data.Vector as V
 import Graphics.Life
 import SDL
 
+-- | Runs a game of life by creating the display window, initializing the game and invoking the game loop
 runGame :: IO ()
 runGame = do
     initializeAll
